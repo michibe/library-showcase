@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  db-service:
+    image: mysql:8.0.29
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "library-db"
+    ports:
+      - target: 3306
+        published: 3306
+    volumes:
+      - database:/var/lib/mysql
+  app-service:
+    depends_on:
+      - db-service
+    build: ./
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    ports:
+      - target: 8080
+        published: 8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev-compose
+    stdin_open: true
+    tty: true
+volumes:
+  database:
