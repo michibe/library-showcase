@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="michibe" id="Add-Initial-Tables">
+
+        <createTable tableName="books">
+            <column name="id" type="BINARY(16)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publisher" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publishing_year" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="BINARY(16)"/>
+        </createTable>
+
+        <createTable tableName="categories">
+            <column name="id" type="BINARY(16)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" type="BINARY(16)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="encrypted_password" type="VARCHAR(200) ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(50) ">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="Add-fk__books__category_id" author="michibe">
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="books"
+                                 constraintName="fk__books__category_id"
+                                 onDelete="SET NULL"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="id"
+                                 referencedTableName="categories"
+                                 validate="true"/>
+
+    </changeSet>
+      <changeSet id="Add-uc__users__email" author="michibe">
+          <addUniqueConstraint columnNames="email"
+                               constraintName="uc__users__email"
+                               tableName="users"
+                               validate="true"/>
+
+
+      </changeSet>
+
+</databaseChangeLog>
